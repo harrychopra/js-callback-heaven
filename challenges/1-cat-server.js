@@ -1,7 +1,16 @@
 const server = require('../utils/server');
 // Do not change anything above this line
 
-function checkServerStatus() {}
+function checkServerStatus(cb) {
+  server.request('/status', (err, status) => {
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+
+    cb(null, status);
+  });
+}
 
 function fetchBannerContent() {}
 
