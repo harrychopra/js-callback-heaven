@@ -35,7 +35,16 @@ function fetchAllOwners(cb) {
   });
 }
 
-function fetchCatsByOwner() {}
+function fetchCatsByOwner(ownerName, cb) {
+  const requestUrl = `/owners/${ownerName}/cats`;
+  server.request(requestUrl, (err, cats) => {
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+    cb(null, cats);
+  });
+}
 
 function fetchCatPics() {}
 
