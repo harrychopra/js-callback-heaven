@@ -12,7 +12,16 @@ function checkServerStatus(cb) {
   });
 }
 
-function fetchBannerContent() {}
+function fetchBannerContent(cb) {
+  server.request('/banner', (err, data) => {
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+
+    cb(null, { ...data, copyrightYear: 2025 });
+  });
+}
 
 function fetchAllOwners() {}
 
