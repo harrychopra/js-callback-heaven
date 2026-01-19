@@ -46,7 +46,31 @@ function fetchCatsByOwner(ownerName, cb) {
   });
 }
 
-function fetchCatPics() {}
+function fetchCatPics(catPics, cb) {
+  if (catPics.length === 0) cb(null);
+  const fileNames = []; // Cat pic file names received with each response
+
+  catPics.forEach(catPic => {
+    const requestUrl = `/pics/${catPic}`;
+
+    server.request(requestUrl, (err, fileName) => {
+      if (err !== null) {
+        fileNames.push('placeholder.jpg');
+
+        if (fileNames.length === catPics.length) {
+          cb(null, fileNames);
+        }
+        return;
+      }
+
+      fileNames.push(fileName);
+
+      if (fileNames.length === catPics.length) {
+        cb(null, fileNames);
+      }
+    });
+  });
+}
 
 function fetchAllCats() {}
 
