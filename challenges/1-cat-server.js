@@ -72,7 +72,32 @@ function fetchCatPics(catPics, cb) {
   });
 }
 
-function fetchAllCats() {}
+function fetchAllCats(cb) {
+  fetchAllOwners((err, owners) => {
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+
+    let allCats = [];
+    let fetchCatsRequestCount = 0;
+
+    owners.forEach(owner => {
+      fetchCatsByOwner(owner, (err2, cats) => {
+        fetchCatsRequestCount++;
+
+        if (err2 === null) {
+          allCats = allCats.concat(cats);
+
+          if (fetchCatsRequestCount === owners.length) {
+            allCats.sort();
+            cb(null, allCats);
+          }
+        }
+      });
+    });
+  });
+}
 
 function fetchOwnersWithCats() {}
 
