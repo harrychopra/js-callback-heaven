@@ -23,7 +23,17 @@ function fetchBannerContent(cb) {
   });
 }
 
-function fetchAllOwners() {}
+function fetchAllOwners(cb) {
+  server.request('/owners', (err, owners) => {
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+
+    const ownerNames = owners.map(owner => owner.toLowerCase());
+    cb(null, ownerNames);
+  });
+}
 
 function fetchCatsByOwner() {}
 
