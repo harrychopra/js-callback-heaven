@@ -167,3 +167,5 @@ module.exports = {
   fetchCatsByOwner,
   server
 };
+
+// Section 1 - Complete
