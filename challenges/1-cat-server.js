@@ -99,34 +99,31 @@ function fetchAllCats(cb) {
   });
 }
 
-// function fetchOwnersWithCats(cb) {
-//   fetchAllOwners((err, owners) => {
-//     if (err !== null) {
-//       cb(err);
-//       return;
-//     }
+function fetchOwnersWithCats(cb) {
+  fetchAllOwners((err, owners) => {
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+    const catsByOwner = {};
+    let fetchCatsRequestCount = 0;
 
-//     const ownersWithCats = [];
-//     const fetchCatsRequestCount = 0;
+    owners.forEach(owner => {
+      fetchCatsByOwner(owner, (err2, cats) => {
+        fetchCatsRequestCount++;
 
-//     owners.forEach(owner => {
-//       fetchCatsByOwner((err2, cats) => {
-//         fetchCatsRequestCount++;
+        if (err2 === null) {
+          catsByOwner[owner] = cats;
 
-//         if (err2 === null) {
-//           ownersWithCats.push({
-//             owner,
-//             cats
-//           });
-
-//           if (fetchCatsRequestCount === owners.length) {
-//             cb(null, ownersWithCats);
-//           }
-//         }
-//       });
-//     });
-//   });
-// }
+          if (fetchCatsRequestCount === owners.length) {
+            const ownersWithCats = owners.map(owner => ({ owner, cats: catsByOwner[owner] }));
+            cb(null, ownersWithCats);
+          }
+        }
+      });
+    });
+  });
+}
 
 function kickLegacyServerUntilItWorks(cb) {
   server.request('/legacy-status', (err, status) => {
@@ -166,7 +163,7 @@ module.exports = {
   fetchCatPics,
   fetchAllOwners,
   fetchBannerContent,
-  //   fetchOwnersWithCats,
+  fetchOwnersWithCats,
   fetchCatsByOwner,
   server
 };
