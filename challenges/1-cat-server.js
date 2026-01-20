@@ -138,7 +138,24 @@ function kickLegacyServerUntilItWorks(cb) {
   });
 }
 
-function buySingleOutfit() {}
+function buySingleOutfit(outfit, cb) {
+  let hasCalledBackOnce = false;
+  const requestUrl = `/outfits/${outfit}`;
+
+  server.request(requestUrl, (err, response) => {
+    if (hasCalledBackOnce) {
+      return;
+    }
+
+    if (err !== null) {
+      cb(err);
+      return;
+    }
+
+    cb(null, response);
+    hasCalledBackOnce = true;
+  });
+}
 
 // Do not change anything below this line
 module.exports = {
@@ -149,7 +166,7 @@ module.exports = {
   fetchCatPics,
   fetchAllOwners,
   fetchBannerContent,
-  fetchOwnersWithCats,
+  //   fetchOwnersWithCats,
   fetchCatsByOwner,
   server
 };
