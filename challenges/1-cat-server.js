@@ -99,9 +99,44 @@ function fetchAllCats(cb) {
   });
 }
 
-function fetchOwnersWithCats() {}
+// function fetchOwnersWithCats(cb) {
+//   fetchAllOwners((err, owners) => {
+//     if (err !== null) {
+//       cb(err);
+//       return;
+//     }
 
-function kickLegacyServerUntilItWorks() {}
+//     const ownersWithCats = [];
+//     const fetchCatsRequestCount = 0;
+
+//     owners.forEach(owner => {
+//       fetchCatsByOwner((err2, cats) => {
+//         fetchCatsRequestCount++;
+
+//         if (err2 === null) {
+//           ownersWithCats.push({
+//             owner,
+//             cats
+//           });
+
+//           if (fetchCatsRequestCount === owners.length) {
+//             cb(null, ownersWithCats);
+//           }
+//         }
+//       });
+//     });
+//   });
+// }
+
+function kickLegacyServerUntilItWorks(cb) {
+  server.request('/legacy-status', (err, status) => {
+    if (err === null) {
+      cb(null, status);
+      return;
+    }
+    kickLegacyServerUntilItWorks(cb);
+  });
+}
 
 function buySingleOutfit() {}
 
